@@ -44,25 +44,13 @@ fn main() {
 
     env_logger::init_from_env(env);
 
-    let matches = Command::new(NAME)
-        .version(VERSION)
-        .author(AUTHOR)
-        .about(DESCRIPTION)
-        .arg(
-            Arg::new("config")
-                .short('c')
-                .long("config")
-                .value_name("FILE")
-                .help("Sets a custom config file path")
-                .value_parser(clap::value_parser!(PathBuf)),
-        )
-        .subcommand(create::create_command())
-        .get_matches();
+    let cli = Cli::parse();
 
-    // clone to avoid lifetime issues
-    let config_path = matches.get_one::<PathBuf>("config").cloned();
+    // switch to .clone if lifetime issues
+    let config_path = cli.config;
 
     let config = utils::load_config(config_path).unwrap();
+
     log::debug!("{:?}", config);
 
     let root_dir = utils::resolve_path(config.config.root_dir).unwrap();
@@ -73,8 +61,8 @@ fn main() {
     let file_path = format!("{}/test.txt", root_dir.display());
     utils::save_to_file(&file_path, "Hello, world!", Some(true)).unwrap();
 
-    match matches.subcommand() {
-        Some(("create", sub_matches)) => create::execute(sub_matches),
+    match cli.command {
+        Some(Commands::Create(args)) => create::execute(&args),
         _ => eprintln!("Invalid subcommand or arguments"),
     }
 }

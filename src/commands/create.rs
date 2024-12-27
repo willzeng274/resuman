@@ -26,13 +26,9 @@ pub fn create_command() -> Command {
         )
 }
 
-pub fn execute(matches: &clap::ArgMatches) {
-    let name = matches.get_one::<String>("name").unwrap();
-    let template = matches.get_one::<String>("template");
-    let public = matches.get_one::<bool>("public").unwrap_or(&false);
-
+pub fn execute(args: &CreateCommand) {
     println!(
         "Creating resume: {} with template: {:?} and public: {}",
-        name, template, public
+        args.name, args.template, args.public
     );
 }
