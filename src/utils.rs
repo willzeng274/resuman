@@ -24,6 +24,8 @@ pub struct Data {
 #[derive(Deserialize, Debug)]
 pub struct Config {
     pub root_dir: std::path::PathBuf,
+    pub template_dir: Option<std::path::PathBuf>,
+    pub db_path: Option<std::path::PathBuf>,
 }
 
 pub fn load_config(config_path: Option<PathBuf>) -> Result<Data> {

@@ -3,6 +3,7 @@ mod error;
 mod resume;
 mod utils;
 
+use std::env;
 use std::fs;
 use std::path::PathBuf;
 
@@ -10,6 +11,7 @@ use clap::{Arg, Command, Parser, Subcommand};
 use commands::create;
 use dotenv::dotenv;
 use env_logger::Env;
+use sqlx::SqlitePool;
 
 const VERSION: &str = env!("CARGO_PKG_VERSION");
 const NAME: &str = env!("CARGO_PKG_NAME");
@@ -37,7 +39,8 @@ enum Commands {
     Create(create::CreateCommand),
 }
 
-fn main() {
+#[tokio::main(flavor = "current_thread")]
+async fn main() -> anyhow::Result<()> {
     dotenv().ok();
 
     let env = Env::default();
@@ -56,8 +59,14 @@ fn main() {
     let root_dir = utils::resolve_path(config.config.root_dir).unwrap();
     log::debug!("{:?}", root_dir);
 
+    let default_db_path = root_dir.join("resuman.db");
+    let db_path = config.config.db_path.unwrap_or(default_db_path);
+
     fs::create_dir_all(&root_dir).unwrap();
 
+    log::debug!("Db path: {:?}", db_path);
+
+    let pool = SqlitePool::connect(db_path.to_str().unwrap()).await?;
     let file_path = format!("{}/test.txt", root_dir.display());
     utils::save_to_file(&file_path, "Hello, world!", Some(true)).unwrap();
 
@@ -65,4 +74,6 @@ fn main() {
         Some(Commands::Create(args)) => create::execute(&args),
         _ => eprintln!("Invalid subcommand or arguments"),
     }
+
+    Ok(())
 }
