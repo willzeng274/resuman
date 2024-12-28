@@ -1,11 +1,12 @@
 use anyhow::Result;
 use dirs;
-use serde_derive::Deserialize;
 use std::fs::OpenOptions;
 use std::io::{self, Write};
 use std::path::PathBuf;
 use toml;
+use crate::config::Data;
 
+#[allow(dead_code)]
 pub fn save_to_file(path: &str, content: &str, append: Option<bool>) -> io::Result<()> {
     let mut file = OpenOptions::new()
         .append(append.unwrap_or(false))
@@ -13,19 +14,6 @@ pub fn save_to_file(path: &str, content: &str, append: Option<bool>) -> io::Resu
         .open(path)?;
     writeln!(file, "{}", content)?;
     Ok(())
-}
-
-#[derive(Deserialize, Debug)]
-pub struct Data {
-    // these are the [config] fields
-    pub config: Config,
-}
-
-#[derive(Deserialize, Debug)]
-pub struct Config {
-    pub root_dir: std::path::PathBuf,
-    pub template_dir: Option<std::path::PathBuf>,
-    pub db_path: Option<std::path::PathBuf>,
 }
 
 pub fn load_config(config_path: Option<PathBuf>) -> Result<Data> {
