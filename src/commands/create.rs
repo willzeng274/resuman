@@ -1,7 +1,9 @@
 use std::{fs, path::PathBuf};
 
+use anyhow::{anyhow, Result};
 use chrono::{DateTime, Utc};
 use clap::Parser;
+use serde_json::json;
 use sqlx::SqlitePool;
 
 use crate::config::Config;
@@ -26,11 +28,11 @@ pub struct CreateCommand {
 
     // #[arg(short, long, help = "Date created")]
     // pub created_at: Option<DateTime<Utc>>,
-    #[arg(long = "letter", help = "Applied with cover letter")]
+    #[arg(short = 'a', long = "letter", help = "Applied with cover letter")]
     pub has_cover_letter: bool,
 
     // below is metadata
-    #[arg(short, long, help = "Date applied", aliases = ["applied", "applied_at"])]
+    #[arg(long, help = "Date applied", aliases = ["applied", "applied_at"])]
     pub applied_time: Option<DateTime<Utc>>,
 
     #[arg(short = 'd', long, help = "Length of job (Weeks)", aliases = ["duration"])]
@@ -49,7 +51,7 @@ pub struct CreateCommand {
     pub notes: Option<String>,
 }
 
-pub async fn execute(cfg: Config, args: &CreateCommand, pool: &SqlitePool) {
+pub async fn execute(cfg: Config, args: &CreateCommand, pool: &SqlitePool) -> Result<()> {
     // sqlite double query: insert into resumes AND metadata
     // use a CTE to insert into resumes first, then insert into metadata
 
@@ -139,26 +141,39 @@ Notes: {}
 
     let folder_path = root_dir.join(&folder);
     let file_path = folder_path.join(&file);
+    let metadata_path = folder_path.join(
+        cfg.metadata_name
+            .clone()
+            .unwrap_or("metadata.json".to_string())
+            .replace("{company}", &company)
+            .replace("{position}", &position)
+            .replace("{date}", &date),
+    );
 
     log::debug!("Folder path: {:?}", folder_path);
     log::debug!("File path: {:?}", file_path);
+    log::debug!("Metadata path: {:?}", metadata_path);
 
     // check if folder exists
     if folder_path.exists() {
-        println!("Folder already exists: {:?}", folder_path);
-        return;
+        return Err(anyhow!("Folder already exists: {:?}", folder_path));
     }
 
     // check if file exists
+    // should be unreachable
     if file_path.exists() {
-        println!("File already exists: {:?}", file_path);
-        return;
+        return Err(anyhow!("File already exists: {:?}", file_path));
     }
 
     // check if template or copy file exists
+    // should be unreachable
     if template.is_empty() && copy_file.is_none() {
-        println!("Template or copy file must be specified");
-        return;
+        return Err(anyhow!("Template or copy file must be specified"));
+    }
+
+    // should be unreachable
+    if metadata_path.exists() {
+        log::warn!("Metadata file already exists: {:?}", metadata_path);
     }
 
     let contents: String;
@@ -167,8 +182,7 @@ Notes: {}
         let copy_content = fs::read_to_string(&copy_file);
 
         if copy_content.is_err() {
-            println!("Copy file not found: {:?}", copy_file);
-            return;
+            return Err(anyhow!("Copy file not found: {:?}", copy_file));
         }
 
         contents = copy_content.unwrap();
@@ -182,8 +196,7 @@ Notes: {}
         let template_content = fs::read_to_string(&template_path.with_extension("tex"));
 
         if template_content.is_err() {
-            println!("Template not found: {:?}", template_path);
-            return;
+            return Err(anyhow!("Template not found: {:?}", template_path));
         }
 
         contents = template_content.unwrap();
@@ -193,14 +206,48 @@ Notes: {}
     fs::create_dir_all(&folder_path).unwrap();
 
     // create the resume file
-    fs::File::create(&file_path).unwrap();
-
     fs::write(&file_path, &contents).unwrap();
 
+    // create the metadata file
+    // serialize datetimes to number timestamps
+    let metadata = json!({
+        "company": args.company,
+        "group": group,
+        "template": template,
+        "position": position,
+        "created_at": now.timestamp(),
+        "has_cover_letter": args.has_cover_letter,
+        "applied_time": applied_time.map(|t| t.timestamp()),
+        "length": length,
+        "location": location,
+        "status": status,
+        "urls": urls,
+        "notes": notes,
+    });
+
+    fs::write(
+        &metadata_path,
+        serde_json::to_string_pretty(&metadata).unwrap(),
+    )
+    .unwrap();
+
+    if args.has_cover_letter {
+        let cover_letter_path = folder_path.join(
+            cfg.cover_letter_name
+                .clone()
+                .unwrap_or("cover_letter.txt".to_string())
+                .replace("{company}", &company)
+                .replace("{position}", &position)
+                .replace("{date}", &date),
+        );
+        fs::write(&cover_letter_path, "").unwrap();
+    }
+
+    let stored_path = folder_path.display().to_string();
     let resume_id = sqlx::query!(
         r#"
-INSERT INTO resumes (company, "group", template, position, created_at, has_cover_letter)
-VALUES (?1, ?2, ?3, ?4, ?5, ?6)
+INSERT INTO resumes (company, "group", template, position, created_at, has_cover_letter, file_path)
+VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)
 RETURNING id
         "#,
         args.company,
@@ -209,6 +256,7 @@ RETURNING id
         position,
         now,
         args.has_cover_letter,
+        stored_path,
     )
     .fetch_one(pool)
     .await
@@ -234,4 +282,5 @@ VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)
 
     // Print the path to the file with no message
     println!("{}", file_path.display());
+    Ok(())
 }

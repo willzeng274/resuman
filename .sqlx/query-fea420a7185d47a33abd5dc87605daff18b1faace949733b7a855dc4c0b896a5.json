@@ -1,0 +1,20 @@
+{
+  "db_name": "SQLite",
+  "query": "\nINSERT INTO resumes (company, \"group\", template, position, created_at, has_cover_letter, file_path)\nVALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)\nRETURNING id\n        ",
+  "describe": {
+    "columns": [
+      {
+        "name": "id",
+        "ordinal": 0,
+        "type_info": "Integer"
+      }
+    ],
+    "parameters": {
+      "Right": 7
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "fea420a7185d47a33abd5dc87605daff18b1faace949733b7a855dc4c0b896a5"
+}

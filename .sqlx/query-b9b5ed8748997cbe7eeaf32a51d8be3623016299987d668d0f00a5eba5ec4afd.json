@@ -1,0 +1,20 @@
+{
+  "db_name": "SQLite",
+  "query": "SELECT DISTINCT \"group\" FROM resumes",
+  "describe": {
+    "columns": [
+      {
+        "name": "group",
+        "ordinal": 0,
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Right": 0
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "b9b5ed8748997cbe7eeaf32a51d8be3623016299987d668d0f00a5eba5ec4afd"
+}

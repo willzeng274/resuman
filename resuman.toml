@@ -13,3 +13,6 @@ default_status = "applying"
 folder_pattern = "{company}_{position}_{date}"
 file_pattern = "resume_{company}_{position}_{date}.tex"
 date_format = "%Y-%m-%d" # always has 0 padding for date
+
+cover_letter_name = "cover_me_with_{company}.txt"
+metadata_name = "metadata_{date}.json"

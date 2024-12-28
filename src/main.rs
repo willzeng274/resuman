@@ -13,7 +13,11 @@ use commands::{create, list, Cli, Commands};
 use dotenv::dotenv;
 use env_logger::Env;
 
-use sqlx::{migrate::Migrator, sqlite::SqliteConnectOptions, ConnectOptions, Pool};
+use sqlx::{
+    migrate::Migrator,
+    sqlite::{SqliteConnectOptions, SqliteJournalMode},
+    Pool,
+};
 
 // use CARGO_MANIFEST_DIR if relative path doesn't work
 static MIGRATOR: Migrator = sqlx::migrate!();
@@ -26,6 +30,11 @@ async fn main() -> anyhow::Result<()> {
     env_logger::init_from_env(env);
 
     let cli = Cli::parse();
+
+    if cli.markdown_help {
+        clap_markdown::print_help_markdown::<Cli>();
+        return Ok(());
+    }
 
     // switch to .clone if lifetime issues
     let config_path = cli.config;
@@ -66,6 +75,7 @@ async fn main() -> anyhow::Result<()> {
     // use sqlite options and create_if_missing
     let pool = Pool::connect_with(
         SqliteConnectOptions::from_str(db_path)?
+            .journal_mode(SqliteJournalMode::Off)
             .create_if_missing(true),
     )
     .await?;
@@ -96,8 +106,12 @@ async fn main() -> anyhow::Result<()> {
     // utils::save_to_file(&file_path, "Hello, world!", Some(true)).unwrap();
 
     match cli.command {
-        Some(Commands::Create(args)) => create::execute(config.main.clone(), &args, &pool).await,
-        Some(Commands::List(args)) => list::execute(config.main.clone(), &args, &pool).await,
+        Some(Commands::Create(args)) => create::execute(config.main.clone(), &args, &pool)
+            .await
+            .map_err(|e| e.into()),
+        Some(Commands::List(args)) => list::execute(config.main.clone(), &args, &pool)
+            .await
+            .map_err(|e| e.into()),
         Some(Commands::Init(_)) => {
             println!(
                 "Successfully initialized resuman!\nEdit your templates at {:?}",
@@ -106,8 +120,6 @@ async fn main() -> anyhow::Result<()> {
             return Ok(()); // exit early
         }
         // unreachable because of arg_required_else_help = true
-        _ => eprintln!("Invalid subcommand or arguments"),
+        _ => Ok(eprintln!("Invalid subcommand or arguments")),
     }
-
-    Ok(())
 }

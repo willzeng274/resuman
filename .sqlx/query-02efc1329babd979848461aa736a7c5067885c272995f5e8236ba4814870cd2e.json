@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "\nINSERT INTO metadata (resume_id, applied_time, length, location, status, urls, notes)\nVALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)\n        ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 7
+    },
+    "nullable": []
+  },
+  "hash": "02efc1329babd979848461aa736a7c5067885c272995f5e8236ba4814870cd2e"
+}

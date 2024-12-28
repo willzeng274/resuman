@@ -3,10 +3,10 @@ use std::path::PathBuf;
 use clap::{Parser, Subcommand};
 
 pub mod create;
+pub mod delete;
+pub mod find;
 pub mod list;
-// pub mod remove;
-// pub mod update;
-// pub mod find;
+pub mod update;
 
 const VERSION: &str = env!("CARGO_PKG_VERSION");
 const NAME: &str = env!("CARGO_PKG_NAME");
@@ -24,6 +24,9 @@ pub struct Cli {
     )]
     pub config: Option<PathBuf>,
 
+    #[arg(long, hide = true)]
+    pub markdown_help: bool,
+
     #[command(subcommand)]
     pub command: Option<Commands>,
 }
@@ -36,5 +39,5 @@ pub enum Commands {
     /// A subcommand for creating something
     Create(create::CreateCommand),
     List(list::ListCommand),
-    Init(InitCommand)
+    Init(InitCommand),
 }

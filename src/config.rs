@@ -21,11 +21,14 @@ pub struct Config {
     pub default_group: Option<String>,
     pub default_template: Option<String>,
     pub default_position: Option<String>,
-    
+
     pub default_length: Option<u16>, // default is 16 weeks or 4 months
     pub default_status: Option<String>, // default is "applying"
 
     pub folder_pattern: Option<String>, // default is "{company}_{position}_{date}"
     pub file_pattern: Option<String>,   // default is "resume_{company}_{position}_{date}"
     pub date_format: Option<String>,    // default is "%Y_%m_%d"
+
+    pub cover_letter_name: Option<String>, // default is "cover_letter.txt"
+    pub metadata_name: Option<String>,     // default is "metadata.json"
 }

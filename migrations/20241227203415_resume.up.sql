@@ -9,6 +9,7 @@ CREATE TABLE resumes (
     "position" TEXT NOT NULL,              -- Position
     "created_at" DATETIME NOT NULL,        -- Date created
     "has_cover_letter" BOOLEAN NOT NULL,   -- Indicates if applied with a cover letter
+    "file_path" TEXT NOT NULL,             -- File path to the resume, should be the directory
     UNIQUE(company, position, created_at) -- Composite unique constraint
 );
 

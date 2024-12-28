@@ -1,0 +1,20 @@
+{
+  "db_name": "SQLite",
+  "query": "SELECT DISTINCT template FROM resumes",
+  "describe": {
+    "columns": [
+      {
+        "name": "template",
+        "ordinal": 0,
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Right": 0
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "f5286e0aed1556a5a3922f18e61a2423596376f093f11aa5dfef877e4e8ca6bb"
+}
