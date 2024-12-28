@@ -32,6 +32,7 @@ pub struct Cli {
 }
 
 #[derive(Parser)]
+#[command(name = "init", about = "Initialize resuman")]
 pub struct InitCommand;
 
 #[derive(Subcommand)]

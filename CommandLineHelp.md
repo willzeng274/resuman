@@ -22,7 +22,7 @@ A command-line tool to manage your resume.
 
 * `create` — A subcommand for creating something
 * `list` — Command related to resume groups
-* `init` — 
+* `init` — Initialize resuman
 
 ###### **Options:**
 
@@ -103,9 +103,22 @@ List all resumes
 
 * `-v`, `--verbose` — Verbose output
 * `-f`, `--fs` — Use fs instead of SQL db
+* `-i`, `--ignore <IGNORE>` — Ignore flag for folders/directories, exact match
 
 
 
 ## `resuman init`
 
+Initialize resuman
+
 **Usage:** `resuman init`
+
+
+
+<hr/>
+
+<small><i>
+    This document was generated automatically by
+    <a href="https://crates.io/crates/clap-markdown"><code>clap-markdown</code></a>.
+</i></small>
+

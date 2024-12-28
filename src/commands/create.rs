@@ -9,7 +9,7 @@ use sqlx::SqlitePool;
 use crate::config::Config;
 
 #[derive(Parser, Debug)]
-#[command(name = "create", about = "Create a new resume", aliases = ["new", "add"])]
+#[command(name = "create", about = "Create a new resume", visible_aliases = ["new", "add"])]
 pub struct CreateCommand {
     #[arg(short, long, required = true, help = "Company name")]
     pub company: String,
@@ -20,10 +20,10 @@ pub struct CreateCommand {
     #[arg(short, long, help = "Template to use", conflicts_with = "file")]
     pub template: Option<String>,
 
-    #[arg(short = 'f', long, help = "A tex file path to use as a template", conflicts_with = "template", aliases = ["tex", "copy"])]
+    #[arg(short = 'f', long, help = "A tex file path to use as a template", conflicts_with = "template", visible_aliases = ["tex", "copy"])]
     pub file: Option<PathBuf>,
 
-    #[arg(short, long, help = "Position/role name", aliases = ["role", "job"])]
+    #[arg(short, long, help = "Position/role name", visible_aliases = ["role", "job"])]
     pub position: Option<String>,
 
     // #[arg(short, long, help = "Date created")]
@@ -32,10 +32,10 @@ pub struct CreateCommand {
     pub has_cover_letter: bool,
 
     // below is metadata
-    #[arg(long, help = "Date applied", aliases = ["applied", "applied_at"])]
+    #[arg(long, help = "Date applied", visible_aliases = ["applied", "applied_at"])]
     pub applied_time: Option<DateTime<Utc>>,
 
-    #[arg(short = 'd', long, help = "Length of job (Weeks)", aliases = ["duration"])]
+    #[arg(short = 'd', long, help = "Length of job (Weeks)", visible_aliases = ["duration"])]
     pub length: Option<u16>,
 
     #[arg(short, long, help = "Location of job")]
