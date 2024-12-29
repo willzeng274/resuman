@@ -17,6 +17,8 @@ CREATE TABLE resumes (
 CREATE TABLE metadata (
     "resume_id" INTEGER PRIMARY KEY,      -- Foreign key directly tied to Resume.id
     "applied_time" DATETIME,              -- Date applied, nullable since the resume may not have been sent
+    "copied_from" TEXT,                   -- Optional resume template name, if copied (we are not using foreign key because the resume might not exist in the database)
+    "metadata_file_path" TEXT NOT NULL,   -- File path to the metadata file
     "length" INTEGER NOT NULL,            -- Job length in days (TimeDelta as integer)
     "location" TEXT,                      -- Optional location of job
     "status" TEXT NOT NULL,               -- Application status

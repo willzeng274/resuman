@@ -26,8 +26,6 @@ pub struct CreateCommand {
     #[arg(short, long, help = "Position/role name", visible_aliases = ["role", "job"])]
     pub position: Option<String>,
 
-    // #[arg(short, long, help = "Date created")]
-    // pub created_at: Option<DateTime<Utc>>,
     #[arg(short = 'a', long = "letter", help = "Applied with cover letter")]
     pub has_cover_letter: bool,
 
@@ -178,7 +176,7 @@ Notes: {}
 
     let contents: String;
     if copy_file.is_some() {
-        let copy_file = copy_file.unwrap();
+        let copy_file = copy_file.clone().unwrap();
         let copy_content = fs::read_to_string(&copy_file);
 
         if copy_content.is_err() {
@@ -219,6 +217,7 @@ Notes: {}
         "has_cover_letter": args.has_cover_letter,
         "applied_time": applied_time.map(|t| t.timestamp()),
         "length": length,
+        "copied_from": copy_file.clone().map(|f| f.display().to_string()),
         "location": location,
         "status": status,
         "urls": urls,
@@ -243,7 +242,7 @@ Notes: {}
         fs::write(&cover_letter_path, "").unwrap();
     }
 
-    let stored_path = folder_path.display().to_string();
+    let stored_path = file_path.display().to_string();
     let resume_id = sqlx::query!(
         r#"
 INSERT INTO resumes (company, "group", template, position, created_at, has_cover_letter, file_path)
@@ -252,7 +251,7 @@ RETURNING id
         "#,
         args.company,
         group,
-        template,
+        template, // does not support copy_file
         position,
         now,
         args.has_cover_letter,
@@ -263,13 +262,17 @@ RETURNING id
     .unwrap()
     .id;
 
+    let copied_from = copy_file.map(|f| f.display().to_string());
+    let metadata_file_path = metadata_path.display().to_string();
     sqlx::query!(
         r#"
-INSERT INTO metadata (resume_id, applied_time, length, location, status, urls, notes)
-VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)
+INSERT INTO metadata (resume_id, applied_time, copied_from, metadata_file_path, length, location, status, urls, notes)
+VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)
         "#,
         resume_id,
         applied_time,
+        copied_from,
+        metadata_file_path,
         length,
         location,
         status,

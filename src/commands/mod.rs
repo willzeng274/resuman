@@ -41,4 +41,5 @@ pub enum Commands {
     Create(create::CreateCommand),
     List(list::ListCommand),
     Init(InitCommand),
+    Update(update::UpdateCommand),
 }

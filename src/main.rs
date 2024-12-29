@@ -8,7 +8,7 @@ use std::{fs, path::PathBuf, str::FromStr};
 
 use clap::Parser;
 
-use commands::{create, list, Cli, Commands};
+use commands::{create, list, update, Cli, Commands};
 
 use dotenv::dotenv;
 use env_logger::Env;
@@ -107,6 +107,9 @@ async fn main() -> anyhow::Result<()> {
 
     match cli.command {
         Some(Commands::Create(args)) => create::execute(config.main.clone(), &args, &pool)
+            .await
+            .map_err(|e| e.into()),
+        Some(Commands::Update(args)) => update::execute(config.main.clone(), &args, &pool)
             .await
             .map_err(|e| e.into()),
         Some(Commands::List(args)) => list::execute(config.main.clone(), &args, &pool)
