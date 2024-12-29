@@ -42,4 +42,5 @@ pub enum Commands {
     List(list::ListCommand),
     Init(InitCommand),
     Update(update::UpdateCommand),
+    Delete(delete::DeleteCommand),
 }
