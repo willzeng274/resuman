@@ -8,7 +8,7 @@ use std::{fs, path::PathBuf, str::FromStr};
 
 use clap::Parser;
 
-use commands::{create, delete, list, update, Cli, Commands};
+use commands::{create, delete, find, list, update, Cli, Commands};
 
 use dotenv::dotenv;
 use env_logger::Env;
@@ -125,6 +125,10 @@ async fn main() -> anyhow::Result<()> {
         Some(Commands::Delete(args)) => delete::execute(config.main.clone(), &args, &pool)
             .await
             .map_err(|e| e.into()),
+        Some(Commands::Find(args)) => find::execute(config.main.clone(), &args, &pool)
+            .await
+            .map_err(|e| e.into()),
+        Some(Commands::Clean(_)) => Ok(()),
         // unreachable because of arg_required_else_help = true
         _ => Ok(eprintln!("Invalid subcommand or arguments")),
     }

@@ -35,6 +35,15 @@ pub struct Cli {
 #[command(name = "init", about = "Initialize resuman")]
 pub struct InitCommand;
 
+// if the user creates a resume without deleting it properly,
+// then the resume will be orphaned in the db...
+// but if the user has created another resume with the same file path
+// there will be a conflict? but this case can be handled by
+// keeping the latest resume and deleting the older ones with the same file path
+#[derive(Parser)]
+#[command(name = "clean", about = "Clean up resuman", visible_aliases = ["clear"], long_about = "Clean up resuman sqlite database by checking for missing paths")]
+pub struct CleanCommand;
+
 #[derive(Subcommand)]
 pub enum Commands {
     /// A subcommand for creating something
@@ -43,4 +52,6 @@ pub enum Commands {
     Init(InitCommand),
     Update(update::UpdateCommand),
     Delete(delete::DeleteCommand),
+    Find(find::FindCommand),
+    Clean(CleanCommand),
 }
