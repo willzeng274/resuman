@@ -128,7 +128,23 @@ async fn main() -> anyhow::Result<()> {
         Some(Commands::Find(args)) => find::execute(config.main.clone(), &args, &pool)
             .await
             .map_err(|e| e.into()),
-        Some(Commands::Clean(_)) => Ok(()),
+        Some(Commands::Clean(_)) => {
+            // go through every entry in the db and check if the file exists
+            // if it doesn't, remove the entry
+            let resumes = sqlx::query!("SELECT * FROM resumes")
+                .fetch_all(&pool)
+                .await?;
+
+            for r in resumes {
+                let path = r.file_path.clone();
+                if !PathBuf::from(&path).exists() {
+                    sqlx::query!("DELETE FROM resumes WHERE id = ?", r.id)
+                        .execute(&pool)
+                        .await?;
+                }
+            }
+            Ok(())
+        }
         // unreachable because of arg_required_else_help = true
         _ => Ok(eprintln!("Invalid subcommand or arguments")),
     }

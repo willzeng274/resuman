@@ -2,7 +2,7 @@
 
 -- Main Resume Table
 CREATE TABLE resumes (
-    "id" INTEGER PRIMARY KEY AUTOINCREMENT, -- Serial ID for unique identification
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, -- Serial ID for unique identification
     "group" TEXT NOT NULL,               -- Organizational group
     "template" TEXT NOT NULL,              -- Template name or .tex file name
     "company" TEXT NOT NULL,               -- Company name
@@ -15,7 +15,7 @@ CREATE TABLE resumes (
 
 -- MetaData Table (One-to-One with Resume)
 CREATE TABLE metadata (
-    "resume_id" INTEGER PRIMARY KEY,      -- Foreign key directly tied to Resume.id
+    "resume_id" INTEGER NOT NULL PRIMARY KEY,      -- Foreign key directly tied to Resume.id
     "applied_time" DATETIME,              -- Date applied, nullable since the resume may not have been sent
     "copied_from" TEXT,                   -- Optional resume template name, if copied (we are not using foreign key because the resume might not exist in the database)
     "metadata_file_path" TEXT NOT NULL,   -- File path to the metadata file
