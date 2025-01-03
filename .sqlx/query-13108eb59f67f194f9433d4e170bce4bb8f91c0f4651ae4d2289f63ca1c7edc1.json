@@ -1,0 +1,116 @@
+{
+  "db_name": "SQLite",
+  "query": "SELECT * FROM resumes JOIN metadata ON resumes.id = metadata.resume_id",
+  "describe": {
+    "columns": [
+      {
+        "name": "id",
+        "ordinal": 0,
+        "type_info": "Integer"
+      },
+      {
+        "name": "group",
+        "ordinal": 1,
+        "type_info": "Text"
+      },
+      {
+        "name": "template",
+        "ordinal": 2,
+        "type_info": "Text"
+      },
+      {
+        "name": "company",
+        "ordinal": 3,
+        "type_info": "Text"
+      },
+      {
+        "name": "position",
+        "ordinal": 4,
+        "type_info": "Text"
+      },
+      {
+        "name": "created_at",
+        "ordinal": 5,
+        "type_info": "Datetime"
+      },
+      {
+        "name": "has_cover_letter",
+        "ordinal": 6,
+        "type_info": "Bool"
+      },
+      {
+        "name": "file_path",
+        "ordinal": 7,
+        "type_info": "Text"
+      },
+      {
+        "name": "resume_id",
+        "ordinal": 8,
+        "type_info": "Integer"
+      },
+      {
+        "name": "applied_time",
+        "ordinal": 9,
+        "type_info": "Datetime"
+      },
+      {
+        "name": "copied_from",
+        "ordinal": 10,
+        "type_info": "Text"
+      },
+      {
+        "name": "metadata_file_path",
+        "ordinal": 11,
+        "type_info": "Text"
+      },
+      {
+        "name": "length",
+        "ordinal": 12,
+        "type_info": "Integer"
+      },
+      {
+        "name": "location",
+        "ordinal": 13,
+        "type_info": "Text"
+      },
+      {
+        "name": "status",
+        "ordinal": 14,
+        "type_info": "Text"
+      },
+      {
+        "name": "urls",
+        "ordinal": 15,
+        "type_info": "Text"
+      },
+      {
+        "name": "notes",
+        "ordinal": 16,
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Right": 0
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      true,
+      false,
+      true,
+      false
+    ]
+  },
+  "hash": "13108eb59f67f194f9433d4e170bce4bb8f91c0f4651ae4d2289f63ca1c7edc1"
+}

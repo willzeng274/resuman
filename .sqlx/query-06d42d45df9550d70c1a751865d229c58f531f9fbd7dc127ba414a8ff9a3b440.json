@@ -1,10 +1,10 @@
 {
   "db_name": "SQLite",
-  "query": "SELECT metadata_file_path FROM resumes JOIN metadata ON resume_id = ?1 WHERE id = ?1",
+  "query": "SELECT file_path FROM resumes WHERE id = ?",
   "describe": {
     "columns": [
       {
-        "name": "metadata_file_path",
+        "name": "file_path",
         "ordinal": 0,
         "type_info": "Text"
       }
@@ -16,5 +16,5 @@
       false
     ]
   },
-  "hash": "50cf42d4463c939fefcbffa75b7abe279b77c47a712de362a3d233389dadb664"
+  "hash": "06d42d45df9550d70c1a751865d229c58f531f9fbd7dc127ba414a8ff9a3b440"
 }

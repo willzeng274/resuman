@@ -1,0 +1,62 @@
+{
+  "db_name": "SQLite",
+  "query": "SELECT * FROM resumes",
+  "describe": {
+    "columns": [
+      {
+        "name": "id",
+        "ordinal": 0,
+        "type_info": "Integer"
+      },
+      {
+        "name": "group",
+        "ordinal": 1,
+        "type_info": "Text"
+      },
+      {
+        "name": "template",
+        "ordinal": 2,
+        "type_info": "Text"
+      },
+      {
+        "name": "company",
+        "ordinal": 3,
+        "type_info": "Text"
+      },
+      {
+        "name": "position",
+        "ordinal": 4,
+        "type_info": "Text"
+      },
+      {
+        "name": "created_at",
+        "ordinal": 5,
+        "type_info": "Datetime"
+      },
+      {
+        "name": "has_cover_letter",
+        "ordinal": 6,
+        "type_info": "Bool"
+      },
+      {
+        "name": "file_path",
+        "ordinal": 7,
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Right": 0
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "920a4492767b5f211f533f4bad072efbd7b1295f15f1a85077eec3c9b7b7dbd2"
+}

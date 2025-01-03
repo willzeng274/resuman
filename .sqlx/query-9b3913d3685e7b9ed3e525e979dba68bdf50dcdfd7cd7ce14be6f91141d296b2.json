@@ -1,0 +1,20 @@
+{
+  "db_name": "SQLite",
+  "query": "SELECT id FROM resumes \n    JOIN metadata ON metadata.resume_id = resumes.id \n    WHERE company LIKE ? \n        OR \"group\" LIKE ? \n        OR template LIKE ? \n        OR position LIKE ? \n        OR created_at LIKE ? \n        OR applied_time LIKE ? \n        OR length = ? \n        OR location LIKE ? \n        OR status LIKE ? \n        OR file_path LIKE ? \n        OR copied_from LIKE ?",
+  "describe": {
+    "columns": [
+      {
+        "name": "id",
+        "ordinal": 0,
+        "type_info": "Integer"
+      }
+    ],
+    "parameters": {
+      "Right": 11
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "9b3913d3685e7b9ed3e525e979dba68bdf50dcdfd7cd7ce14be6f91141d296b2"
+}

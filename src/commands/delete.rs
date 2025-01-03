@@ -17,7 +17,7 @@ pub struct DeleteCommand {
     pub file: bool,
 }
 
-pub async fn execute(cfg: Config, args: &DeleteCommand, pool: &SqlitePool) -> Result<()> {
+pub async fn execute(_cfg: Config, args: &DeleteCommand, pool: &SqlitePool) -> Result<()> {
     log::debug!("Deleting with arguments:\n{:#?}", args);
 
     if args.file {

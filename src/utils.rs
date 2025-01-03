@@ -1,20 +1,8 @@
+use crate::config::Data;
 use anyhow::Result;
 use dirs;
-use std::fs::OpenOptions;
-use std::io::{self, Write};
 use std::path::PathBuf;
 use toml;
-use crate::config::Data;
-
-#[allow(dead_code)]
-pub fn save_to_file(path: &str, content: &str, append: Option<bool>) -> io::Result<()> {
-    let mut file = OpenOptions::new()
-        .append(append.unwrap_or(false))
-        .create(true)
-        .open(path)?;
-    writeln!(file, "{}", content)?;
-    Ok(())
-}
 
 pub fn load_config(config_path: Option<PathBuf>) -> Result<Data> {
     if let Some(path) = config_path {

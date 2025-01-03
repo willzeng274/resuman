@@ -47,7 +47,7 @@ pub struct FindCommand {
     all: Option<String>,
 }
 
-pub async fn execute(cfg: Config, args: &FindCommand, pool: &SqlitePool) -> Result<()> {
+pub async fn execute(_cfg: Config, args: &FindCommand, pool: &SqlitePool) -> Result<()> {
     log::debug!("Find arguments:\n{:#?}", args);
 
     // run sql queries to find resumes from db

@@ -1,0 +1,68 @@
+{
+  "db_name": "SQLite",
+  "query": "SELECT r.*, m.metadata_file_path FROM resumes r JOIN metadata m ON r.id = m.resume_id WHERE r.id = ?1",
+  "describe": {
+    "columns": [
+      {
+        "name": "id",
+        "ordinal": 0,
+        "type_info": "Integer"
+      },
+      {
+        "name": "group",
+        "ordinal": 1,
+        "type_info": "Text"
+      },
+      {
+        "name": "template",
+        "ordinal": 2,
+        "type_info": "Text"
+      },
+      {
+        "name": "company",
+        "ordinal": 3,
+        "type_info": "Text"
+      },
+      {
+        "name": "position",
+        "ordinal": 4,
+        "type_info": "Text"
+      },
+      {
+        "name": "created_at",
+        "ordinal": 5,
+        "type_info": "Datetime"
+      },
+      {
+        "name": "has_cover_letter",
+        "ordinal": 6,
+        "type_info": "Bool"
+      },
+      {
+        "name": "file_path",
+        "ordinal": 7,
+        "type_info": "Text"
+      },
+      {
+        "name": "metadata_file_path",
+        "ordinal": 8,
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "05ecde6960ce5ef0733c980e49b3a4ad5bb6229bd7d19a3cdd849a6c9e3c67d3"
+}
